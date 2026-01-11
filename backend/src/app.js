@@ -12,16 +12,20 @@ const app = express();
 app.use(bodyParser.json());
 
 // Import models
-const CallTranscript = require('./models/CallTranscript');
-const Keyword = require('./models/Keyword');
-const IncidentType = require('./models/IncidentType');
-const FireTruck = require('./models/FireTruck');
-const Firefighter = require('./models/Firefighter');
-const Equipment = require('./models/Equipment');
-const OperationsHistory = require('./models/OperationsHistory');
+const CallTranscript = require('../models/CallTranscript');
+
+
+const Equipment = require('../models/Equipment');
+const Firefighter = require('../models/Firefighter');
+const FireTruck = require('../models/FireTruck');
+const IncidentType = require('../models/IncidentType');
+const Keyword = require('../models/Keyword');
+const OperationsHistory = require('../models/OperationsHistory');
+
 
 // Hugging Face API setup
-const HUGGING_FACE_API_KEY = process.env.HUGGING_FACE_API_KEY;
+ const HUGGING_FACE_API_KEY = process.env.HUGGING_FACE_API_KEY;
+
 const HUGGING_FACE_API_URL = 'https://api-inference.huggingface.co/models/facebook/wav2vec2-base-960h';
 
 // ------------------- Routes -------------------
@@ -101,3 +105,4 @@ app.post('/call', async (req, res) => {
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+module.exports = app;
