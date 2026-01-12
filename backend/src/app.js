@@ -28,7 +28,8 @@ app.use(cors({
 
 // ------------------- Models -------------------
 // Uncomment User model for login
-const User = require('./models/user');
+const User = require("./model/user");
+
 // Keep other models commented for now
  const CallTranscript = require('./models/CallTranscript');
  const Keyword = require('./models/Keyword');
