@@ -12,15 +12,15 @@ const app = express();
 app.use(bodyParser.json());
 
 // Import models
-const CallTranscript = require('../models/CallTranscript');
+const CallTranscript = require('./models/CallTranscript');
 
 
-const Equipment = require('../models/Equipment');
-const Firefighter = require('../models/Firefighter');
-const FireTruck = require('../models/FireTruck');
-const IncidentType = require('../models/IncidentType');
-const Keyword = require('../models/Keyword');
-const OperationsHistory = require('../models/OperationsHistory');
+const Equipment = require('./models/Equipment');
+const Firefighter = require('./models/Firefighter');
+const FireTruck = require('./models/FireTruck');
+const IncidentType = require('./models/IncidentType');
+const Keyword = require('./models/Keyword');
+const OperationsHistory = require('./models/OperationsHistory');
 
 
 // Hugging Face API setup
