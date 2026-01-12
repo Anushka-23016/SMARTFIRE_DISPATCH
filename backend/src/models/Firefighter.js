@@ -8,4 +8,3 @@ const FirefighterSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Firefighter', FirefighterSchema);
-

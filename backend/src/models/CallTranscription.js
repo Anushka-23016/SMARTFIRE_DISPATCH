@@ -1,5 +1,3 @@
-const mongoose = require('mongoose');
-
 const CallTranscriptSchema = new mongoose.Schema({
   call_number: { type: String, required: true },
   audio_url: { type: String },
