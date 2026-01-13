@@ -39,24 +39,22 @@ app.use(
   })
 );
 
-// ------------------- TEST ROUTE -------------------
-app.get("/test", async (req, res) => {
-  try {
-    const data = await IncidentType.findOne();
+// ------------------- Models -------------------
+// Uncomment User model for login
+const User = require('./models/user');
+// Keep other models commented for now
+ const CallTranscript = require('./models/CallTranscript');
+ const Keyword = require('./models/Keyword');
+ const IncidentType = require('./models/IncidentType');
+ const FireTruck = require('./models/FireTruck');
+ const Firefighter = require('./models/Firefighter');
+ const Equipment = require('./models/Equipment');
+const OperationsHistory = require('./models/OperationsHistory');
 
-    res.json({
-      message: "Server is running ✅",
-      db: "Connected ✅",
-      sampleData: data || "No documents yet"
-    });
-  } catch (err) {
-    res.status(500).json({
-      message: "Server is running ✅",
-      db: "Connection failed ❌",
-      error: err.message
-    });
-  }
-});
+// ------------------- Hugging Face Setup -------------------
+const HUGGING_FACE_API_KEY = process.env.HUGGING_FACE_API_KEY;
+const HUGGING_FACE_API_URL =
+  'https://api-inference.huggingface.co/models/facebook/wav2vec2-base-960h';
 
 // ------------------- AI ROUTES -------------------
 app.use("/api/ai", aiDispatch);
