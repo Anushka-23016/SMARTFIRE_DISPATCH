@@ -41,15 +41,15 @@ app.use(
 
 // ------------------- Models -------------------
 // Uncomment User model for login
-const User = require('./models/user');
+//const User = require('./models/user');
 // Keep other models commented for now
- const CallTranscript = require('./models/CallTranscript');
- const Keyword = require('./models/Keyword');
- const IncidentType = require('./models/IncidentType');
- const FireTruck = require('./models/Firetruck');
- const Firefighter = require('./models/Firefighter');
- const Equipment = require('./models/Equipment');
-const OperationsHistory = require('./models/OperationsHistory');
+// const CallTranscript = require('./models/CallTranscript');
+// const Keyword = require('./models/Keyword');
+ //const IncidentType = require('./models/IncidentType');
+// const FireTruck = require('./models/Firetruck');
+ //const Firefighter = require('./models/Firefighter');
+ //const Equipment = require('./models/Equipment');
+//const OperationsHistory = require('./models/OperationsHistory');
 
 // ------------------- Hugging Face Setup -------------------
 const HUGGING_FACE_API_KEY = process.env.HUGGING_FACE_API_KEY;
