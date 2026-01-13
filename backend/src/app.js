@@ -1,69 +1,83 @@
 // app.js
-require('dotenv').config();          // Load environment variables
-const express = require('express');
-const bodyParser = require('body-parser');
-const axios = require('axios');
-const cors = require('cors');
-const connectDB = require('./config/db'); // MongoDB connection
+require("dotenv").config();
+const express = require("express");
+const bodyParser = require("body-parser");
+const axios = require("axios");
+const cors = require("cors");
 
-// Connect to MongoDB
+// Database
+const connectDB = require("./config/db");
+
+// Routes
+const aiDispatch = require("./routes/aiDispatch");
+
+// Models
+const User = require("./models/user");
+const CallTranscript = require("./models/CallTranscript");
+const Keyword = require("./models/Keyword");
+const IncidentType = require("./models/IncidentType");
+const FireTruck = require("./models/Firetruck");
+const Firefighter = require("./models/Firefighter");
+const Equipment = require("./models/Equipment");
+const OperationHistory = require("./models/OperationHistory");
+
+// ------------------- DB -------------------
 connectDB();
 
 const app = express();
 
 // ------------------- MIDDLEWARE -------------------
-
-// Parse JSON bodies
+app.use(express.json());
 app.use(bodyParser.json());
 
-// Enable CORS for your frontend only
-app.use(cors({
-  origin: "http://localhost:5174", // <-- your frontend URL
-  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5174",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+  })
+);
 
-// ✅ Removed invalid wildcard app.options("*")
+// ------------------- TEST ROUTE -------------------
+app.get("/test", async (req, res) => {
+  try {
+    const data = await IncidentType.findOne();
 
-// ------------------- Models -------------------
-// Uncomment User model for login
-const User = require('./models/user');
-// Keep other models commented for now
- const CallTranscript = require('./models/CallTranscript');
- const Keyword = require('./models/Keyword');
- const IncidentType = require('./models/IncidentType');
- const FireTruck = require('./models/FireTruck');
- const Firefighter = require('./models/Firefighter');
- const Equipment = require('./models/Equipment');
-const OperationsHistory = require('./models/OperationsHistory');
-
-// ------------------- Hugging Face Setup -------------------
-const HUGGING_FACE_API_KEY = process.env.HUGGING_FACE_API_KEY;
-const HUGGING_FACE_API_URL =
-  'https://api-inference.huggingface.co/models/facebook/wav2vec2-base-960h';
-
-// ------------------- Routes -------------------
-
-// Test route
-app.get('/test', (req, res) => {
-  res.json({ message: "Server is running and DB connected!" });
+    res.json({
+      message: "Server is running ✅",
+      db: "Connected ✅",
+      sampleData: data || "No documents yet"
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Server is running ✅",
+      db: "Connection failed ❌",
+      error: err.message
+    });
+  }
 });
 
+// ------------------- AI ROUTES -------------------
+app.use("/api/ai", aiDispatch);
+
 // ------------------- LOGIN -------------------
-app.post('/api/login', async (req, res) => {
-  const { username, password } = req.body; // username input from frontend
+app.post("/api/login", async (req, res) => {
+  const { username, password } = req.body;
 
   try {
-    // Map frontend username input to email in DB
     const user = await User.findOne({ email: username });
 
     if (!user) {
-      return res.status(400).json({ success: false, message: "User not found" });
+      return res
+        .status(400)
+        .json({ success: false, message: "User not found" });
     }
 
     if (user.password !== password) {
-      return res.status(400).json({ success: false, message: "Wrong password" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Wrong password" });
     }
 
     res.json({
@@ -75,16 +89,11 @@ app.post('/api/login', async (req, res) => {
         role: user.role
       }
     });
-
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
-// ------------------- CALL PROCESSING -------------------
-// ... your existing call processing code stays unchanged
-
 // ------------------- EXPORT APP -------------------
-// ✅ Do NOT start the server here; server.js handles it
 module.exports = app;

@@ -28,4 +28,4 @@ router.post("/login", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default auth;
