@@ -8,18 +8,17 @@ const cors = require("cors");
 // Database
 const connectDB = require("./config/db");
 
-// Routes
-const aiDispatch = require("./routes/aiDispatch");
+
 
 // Models
-const User = require("./models/user");
-const CallTranscript = require("./models/CallTranscript");
-const Keyword = require("./models/Keyword");
-const IncidentType = require("./models/IncidentType");
-const FireTruck = require("./models/Firetruck");
-const Firefighter = require("./models/Firefighter");
-const Equipment = require("./models/Equipment");
-const OperationHistory = require("./models/OperationHistory");
+const User = require("./model/user");
+const CallTranscript = require("./model/CallTranscript");
+const Keyword = require("./model/Keyword");
+const IncidentType = require("./model/IncidentType");
+const FireTruck = require("./model/FireTruck");
+const Firefighter = require("./model/Firefighter");
+const Equipment = require("./model/Equipment");
+const OperationsHistory = require("./model/OperationsHistory");
 
 // ------------------- DB -------------------
 connectDB();
@@ -28,7 +27,7 @@ const app = express();
 
 // ------------------- MIDDLEWARE -------------------
 app.use(express.json());
-app.use(bodyParser.json());
+
 
 app.use(
   cors({
@@ -39,17 +38,6 @@ app.use(
   })
 );
 
-// ------------------- Models -------------------
-// Uncomment User model for login
-//const User = require('./models/user');
-// Keep other models commented for now
-// const CallTranscript = require('./models/CallTranscript');
-// const Keyword = require('./models/Keyword');
- //const IncidentType = require('./models/IncidentType');
-// const FireTruck = require('./models/Firetruck');
- //const Firefighter = require('./models/Firefighter');
- //const Equipment = require('./models/Equipment');
-//const OperationsHistory = require('./models/OperationsHistory');
 
 // ------------------- Hugging Face Setup -------------------
 const HUGGING_FACE_API_KEY = process.env.HUGGING_FACE_API_KEY;
@@ -57,8 +45,9 @@ const HUGGING_FACE_API_URL =
   'https://api-inference.huggingface.co/models/facebook/wav2vec2-base-960h';
 
 // ------------------- AI ROUTES -------------------
-app.use("/api/ai", aiDispatch);
-
+// Routes
+const aiDispatchRouter = require("./routes/aiDispatch");
+app.use("/api/ai", aiDispatchRouter);
 // ------------------- LOGIN -------------------
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;

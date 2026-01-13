@@ -1,6 +1,6 @@
-const IncidentType = require("../models/IncidentType"); // your DB model
-const { getEmbedding } = require("./embeddingUtils");   // utility for semantic similarity
-const { zeroShotClassify } = require("./zeroShotUtils"); // utility for unknown incident detection
+const IncidentType = require("../model/IncidentType");
+const { getTextEmbedding } = require("./embeddingUtils");
+const { zeroShotClassify } = require("./zeroShotUtils");
 
 const incidentInstructions = {
   fire: ["Alert fire brigade", "Evacuate building", "Shut off electricity"],
@@ -13,8 +13,9 @@ async function detectIncident(text) {
   let incidentType;
   let instructions;
 
-  // Step 1: Try to match known incidents in DB
   const knownIncidents = await IncidentType.find();
+
+  // Step 1: Try to match keywords in DB
   const matched = knownIncidents.find(inc =>
     text.toLowerCase().includes(inc.keyword.toLowerCase())
   );
@@ -23,7 +24,7 @@ async function detectIncident(text) {
     incidentType = matched.name;
     instructions = incidentInstructions[incidentType] || [];
   } else {
-    // Step 2: Unknown incident → use Zero-Shot Classification
+    // Step 2: Unknown → zero-shot classification using Hugging Face
     incidentType = await zeroShotClassify(text);
     instructions = incidentInstructions[incidentType] || ["Follow default safety protocol"];
   }
